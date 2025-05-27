@@ -9,3 +9,40 @@
   font-family: 'Gabriela', serif;
   font-size: 18px;
 }
+
+.map-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.custom-map {
+  width: 100%;
+  height: 400px;
+  border-radius: 20px;
+}
+
+.info-card {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  z-index: 1000;
+  font-family: 'Open Sans', serif;
+  border-left: 6px solid #4ED7F1;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  min-width: 220px;
+}
+
+.status-cards .card {
+  font-family: 'Open Sans', serif;
+  border-left: 5px solid;
+  transition: transform 0.2s ease;
+}
+
+.status-cards .card:hover {
+  transform: translateY(-4px);
+}
