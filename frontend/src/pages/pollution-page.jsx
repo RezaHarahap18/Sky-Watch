@@ -2,7 +2,7 @@ import JakartaMap from '../components/jakartaMap';
 
 function PollutionPage() {
   return (
-    <div className="container mt-4">
+    <div className="container mt-5 pt-4">
       <h2 className="mb-4">Peta Polusi Jakarta</h2>
       <JakartaMap />
       <div className="status-cards container my-4">
