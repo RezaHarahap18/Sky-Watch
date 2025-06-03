@@ -50,7 +50,7 @@ const InfoSection = () => {
                 (e.currentTarget.style.transform = "scale(1)")
               }
             >
-              Informasi Lainnya
+              Baca Selengkapnya
             </a>
           </div>
           {/* Image */}
