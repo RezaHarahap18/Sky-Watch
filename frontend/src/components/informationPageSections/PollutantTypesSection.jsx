@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'; 
 import styles from '../../pages/InformationPage.module.css';
 
 const pollutantsData = [
@@ -64,6 +64,7 @@ const pollutantsData = [
   }
 ];
 
+
 function PollutantDetailItem({ label, value }) {
   return (
     <div className={styles.pollutantDetailItem}>
@@ -74,30 +75,53 @@ function PollutantDetailItem({ label, value }) {
   );
 }
 
-function PollutantCard({ iconPlaceholder, name, description, sources, impacts, iconBgClass, accentColorClass }) {
+function PollutantCard({ pollutant, isExpanded, onToggle }) {
+  const { iconPlaceholder, name, description, sources, impacts, iconBgClass, accentColorClass } = pollutant;
+
   return (
-    <div className={styles.pollutantCard}>
-      <div className={`${styles.pollutantCardIconContainer} ${iconBgClass}`}>
-        <span className={styles.pollutantCardIcon}>{iconPlaceholder}</span>
+    <div
+      className={`${styles.pollutantCard} ${isExpanded ? styles.pollutantCardExpanded : styles.pollutantCardCollapsed}`}
+      onClick={onToggle}
+      role="button"
+      tabIndex={0}
+      onKeyPress={(e) => (e.key === 'Enter' || e.key === ' ') && onToggle()}
+    >
+      <div className={`${styles.pollutantCardIconContainer} ${iconBgClass} ${isExpanded ? styles.iconContainerExpanded : styles.iconContainerCollapsed}`}>
+        <span className={`${styles.pollutantCardIcon} ${isExpanded ? styles.iconExpanded : styles.iconCollapsed}`}>{iconPlaceholder}</span>
       </div>
-      <h3 className={`${styles.pollutantCardTitle} text-center`}>{name}</h3>
-      <div className={`${styles.titleAccentLine} ${accentColorClass}`}></div>
-      <div className={styles.pollutantCardContent}>
-        <PollutantDetailItem label="Deskripsi" value={description} />
-        <PollutantDetailItem
-          label={<>Sumber<br />Utama</>}
-          value={sources}
-        />
-        <PollutantDetailItem
-          label={<>Dampak<br />Kesehatan</>}
-          value={impacts}
-        />
-      </div>
+      <h3 className={`${styles.pollutantCardTitle} ${isExpanded ? styles.titleExpanded : styles.titleCollapsed} text-center`}>{name}</h3>
+
+      {isExpanded && (
+        <>
+          <div className={`${styles.titleAccentLine} ${accentColorClass}`}></div>
+          <div className={styles.pollutantCardContent}>
+            <PollutantDetailItem label="Deskripsi" value={description} />
+            <PollutantDetailItem
+              label={<>Sumber<br />Utama</>}
+              value={sources}
+            />
+            <PollutantDetailItem
+              label={<>Dampak<br />Kesehatan</>}
+              value={impacts}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
 function PollutantTypesSection() {
+  const [openCards, setOpenCards] = useState({}); 
+
+  const handleCardToggle = (pollutantId) => {
+    setOpenCards(prevOpenCards => ({
+      ...prevOpenCards, 
+      [pollutantId]: !prevOpenCards[pollutantId] 
+    }));
+  };
+
+
   return (
     <section id="jenis-polutan" className={`${styles.infoSection} ${styles.fadeInElement}`}>
       <div className="d-flex align-items-center mb-3">
@@ -105,22 +129,16 @@ function PollutantTypesSection() {
         <h2 className={styles.sectionTitle}>Mengenal Polutan Udara Utama</h2>
       </div>
       <p className={styles.paragraph}>
-        Kualitas udara dipengaruhi oleh berbagai macam zat pencemar (polutan) di udara.
-        Memahami jenis-jenis polutan utama dapat membantu kita menyadari sumbernya dan potensi
-        dampaknya terhadap kesehatan. Berikut adalah beberapa di antaranya:
+        Klik pada setiap kartu polutan di bawah untuk melihat detail informasi, sumber utama, dan dampak kesehatannya:
       </p>
 
       <div className={styles.pollutantGridContainer}>
         {pollutantsData.map(pollutant => (
           <PollutantCard
             key={pollutant.id}
-            iconPlaceholder={pollutant.iconPlaceholder}
-            name={pollutant.name}
-            description={pollutant.description}
-            sources={pollutant.sources}
-            impacts={pollutant.impacts}
-            iconBgClass={pollutant.iconBgClass}
-            accentColorClass={pollutant.accentColorClass}
+            pollutant={pollutant}
+            isExpanded={!!openCards[pollutant.id]} 
+            onToggle={() => handleCardToggle(pollutant.id)}
           />
         ))}
       </div>
