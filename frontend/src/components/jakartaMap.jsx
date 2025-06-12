@@ -1,23 +1,51 @@
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet'; 
 import { useEffect, useState } from 'react';
+import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import styles from './JakartaMap.module.css';
 
-function JakartaMap() {
+import markerIconPng from "leaflet/dist/images/marker-icon.png"
+import markerShadowPng from "leaflet/dist/images/marker-shadow.png"
+const defaultIcon = new Icon({
+  iconUrl: markerIconPng,
+  shadowUrl: markerShadowPng,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41]
+});
+
+// --- DATA GAYA PETA ---
+const mapStyles = {
+  light: {
+    name: "Terang",
+    url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  },
+  dark: {
+    name: "Gelap",
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  },
+  standard: {
+    name: "Standar",
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }
+};
+// --- AKHIR DATA GAYA PETA ---
+
+
+const getAqiColor = (category) => {
+  if (category === "BAIK") return "green";
+  if (category === "SEDANG") return "orange";
+  if (category === "TIDAK SEHAT") return "red";
+  if (category === "SANGAT TIDAK SEHAT") return "purple";
+  if (category === "BERBAHAYA") return "#700000";
+  return "grey";
+};
+
+function JakartaMap({ dailyData, coords }) { 
   const [geoData, setGeoData] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const pollutants = [
-    { name: "PM2.5", value: 88 },
-    { name: "PM10", value: 120 },
-    { name: "SO2", value: 35 },
-    { name: "CO", value: 7 },
-    { name: "O3", value: 60 },
-    { name: "NO2", value: 90 }
-  ];
-
-  const current = pollutants[activeIndex];
-  const status = current.value <= 50 ? "Baik" : current.value <= 100 ? "Sedang" : "Buruk";
-  const statusColor = status === "Baik" ? "green" : status === "Sedang" ? "orange" : "red";
+  const [currentMapStyleKey, setCurrentMapStyleKey] = useState('light'); 
 
   useEffect(() => {
     fetch('/id-jk.geojson')
@@ -25,48 +53,62 @@ function JakartaMap() {
       .then(data => setGeoData(data));
   }, []);
 
+  if (!dailyData || !coords) {
+    return <div>Memuat data peta...</div>;
+  }
+
+  const position = [coords.lat, coords.lon];
+  const statusColor = getAqiColor(dailyData.categori);
+
   const geoStyle = {
     fillColor: statusColor,
-    weight: 2,
-    opacity: 1,
-    color: 'black',
-    fillOpacity: 0.4,
-  };
-
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? pollutants.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev === pollutants.length - 1 ? 0 : prev + 1));
+    weight: 1, 
+    opacity: 0.5,
+    color: 'grey',
+    fillOpacity: 0.3,
   };
 
   return (
-    <div className="map-wrapper">
-      <div className="info-card shadow">
-        <div className="d-flex justify-content-between align-items-center">
-          <button onClick={handlePrev} className="btn btn-sm btn-outline-primary">&lt;</button>
-          <div className="text-center mx-2">
-            <h6 style={{ marginBottom: 4 }}>{current.name}: {current.value} µg/m³</h6>
-            <p style={{ marginBottom: 0 }}>
-              Status: <strong style={{ color: statusColor }}>{status}</strong>
-            </p>
+    <div className={styles.mapContainerWrapper}>
+      <h4 className={styles.mapTitle}>Lokasi Stasiun Pemantauan</h4>
+      <div className={styles.mapRelativeContainer}> 
+        <MapContainer
+          key={`<span class="math-inline">\{dailyData\.stasiun\_prediksi\}\-</span>{currentMapStyleKey}`} 
+          center={position}
+          zoom={13}
+          className={styles.mapContainer}
+        >
+          {/* --- TOMBOL PEMILIH GAYA PETA --- */}
+          <div className={styles.mapStyleSwitcher}>
+            {Object.keys(mapStyles).map(styleKey => (
+              <button
+                key={styleKey}
+                className={`${styles.styleButton} ${currentMapStyleKey === styleKey ? styles.activeButton : ''}`}
+                onClick={() => setCurrentMapStyleKey(styleKey)}
+              >
+                {mapStyles[styleKey].name}
+              </button>
+            ))}
           </div>
-          <button onClick={handleNext} className="btn btn-sm btn-outline-primary">&gt;</button>
-        </div>
-      </div>
+          {/* --- AKHIR TOMBOL PEMILIH --- */}
 
-      <MapContainer
-        center={[-6.2, 106.8]}
-        zoom={10}
-        className='custom-map'
-      >
-        <TileLayer
-          attribution='&copy; OpenStreetMap'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {geoData && <GeoJSON data={geoData} style={geoStyle} />}
-      </MapContainer>
+          <TileLayer
+            attribution={mapStyles[currentMapStyleKey].attribution}
+            url={mapStyles[currentMapStyleKey].url}
+          />
+
+          {geoData && <GeoJSON data={geoData} style={geoStyle} />}
+
+          {/* Menampilkan marker di lokasi stasiun */}
+          <Marker position={position} icon={defaultIcon}>
+            <Popup>
+              <strong>{dailyData.stasiun_prediksi || "Stasiun Terpilih"}</strong>
+              <br />
+              Prediksi AQI: {dailyData.max} ({dailyData.categori})
+            </Popup>
+          </Marker>
+        </MapContainer>
+      </div>
     </div>
   );
 }

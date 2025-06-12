@@ -1,0 +1,92 @@
+.detailsContainer {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  margin-top: 2rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Grid untuk Rincian Polutan */
+.pollutantGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+}
+
+.pollutantStatCard {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pollutantStatCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pollutantName {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.pollutantValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0056b3; 
+}
+
+.pollutantUnit {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.recommendationsList {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.recommendationItem {
+  display: flex;
+  align-items: center; 
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-left: 4px solid #007bff;
+}
+
+.recommendationIcon {
+  font-size: 1.8rem; 
+  margin-right: 15px;
+  width: 40px; 
+  text-align: center;
+  flex-shrink: 0;
+  color: #007bff;
+  line-height: 1;
+}
+
+.recommendationText {
+  margin: 0;
+  color: #34495e;
+  line-height: 1.6;
+}

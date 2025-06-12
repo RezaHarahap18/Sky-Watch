@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import joblib
 import json
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from tensorflow.keras.models import load_model
@@ -13,6 +14,18 @@ class PredictionInput(BaseModel):
 
 
 app = FastAPI(title="API Prediksi Kualitas Udara")
+
+origins = [
+    "http://localhost:5173", 
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"], 
+)
 
 model = "model.keras"
 scaler = "minmax_scaler.pkl"
