@@ -17,6 +17,7 @@ app = FastAPI(title="API Prediksi Kualitas Udara")
 
 origins = [
     "http://localhost:5173", 
+    "https://skyywatchh.netlify.app/" #tambahin ini
 ]
 
 app.add_middleware(
