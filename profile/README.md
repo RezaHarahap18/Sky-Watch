@@ -1,11 +1,13 @@
 # Sky Watch
 <div align="center">
-<img src="https://github.com/" width="50%" height="50%" >
+<img src="https://github.com/RezaHarahap18/Sky-Watch/blob/main/profile/logo%20skywatch.png width="50%" height="50%" >
 </div>
 
 
 ## About
-With the increasing number of cat owners around the world, effective cat health management remains a challenge, mainly due to limited access to specialised veterinary care and difficulty in recognising early signs of illness. Our project, Cat Ease, is a mobile app designed specifically for cat owners. The app focuses on detecting skin diseases in cats through image analysis, which can help cat owners get easy-to-understand health information and quick access to related resources.
+Indonesia is facing a severe air pollution crisis, ranking first in Southeast Asia and 15th globally for worst air quality. The majority of the most polluted cities are concentrated in the Greater Jakarta area, with Jakarta consistently topping the list of cities with the worst air quality in the world. The main sources of pollution in Greater Jakarta come from the transportation sector (44%) and industry/coal-fired power plants (34%), both of which have shown significant increases. Jakarta itself has over 12 million motorized vehicles and the highest construction activity in Indonesia, producing large emissions from vehicles as well as heavy machinery and building materials. The combination of massive emissions from transportation and construction is the main driver of poor air quality in the capital. 
+
+The impact of this pollution is very evident in Jakarta’s daily and annual air quality, which often reaches the ‘Unhealthy’ category and poses health risks to residents. For example, on June 11, 2025, Jakarta’s Air Quality Index (AQI) reached 163, making it the most polluted city in Indonesia. This is not a one-time incident; Jakarta consistently ranks in the top hundred of the world’s most polluted cities, even jumping to 6th place during peak times. This high pollution concentration has a direct impact on the health of residents, especially in densely populated areas such as South Jakarta, West Jakarta, and East Jakarta, increasing health risks in their daily activities.
 
 ## Team Member :
 
