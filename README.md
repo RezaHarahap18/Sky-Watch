@@ -1,6 +1,6 @@
 # Sky Watch
 <div align="center">
-<img src="https://github.com/RezaHarahap18/Sky-Watch/blob/main/profile/logo%20capstone.png" width="50%" height="50%" >
+<img src="https://github.com/RezaHarahap18/Sky-Watch/blob/main/logo%20skywatch.png" width="50%" height="50%" >
 </div>
 
 
